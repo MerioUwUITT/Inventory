@@ -1,0 +1,345 @@
+﻿@{
+    ViewBag.Title = "My Inventory";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/Index.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/login.css" rel="stylesheet" />
+
+
+</head>
+<body>
+    <nav class="nav-extended full-width-navbar no-padding brown lighten-4" style="color:black;">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo right" style="color:black;">My Inventory</a>
+            <ul id="nav-locations" class="left hide-on-med-and-down">
+                @{
+                    if (ViewBag.Locations != null && ViewBag.Locations.Count > 0)
+                    {
+                        foreach (var location in ViewBag.Locations)
+                        {
+                            <li>
+                                <a href="#" class="location-link" style="color:black;"id="locationnav_@(location.Name.ToLower())_@(location.LocationID)" onclick="ClickedNav(this.id)">@location.Name</a>
+                            </li>
+                            <li>
+                                <a href="#" class="location-link"  id="locationSettings_@(location.Name.ToLower())_@(location.LocationID)" onclick="openLocationSettingsModal('@(location.Name)', '@(location.LocationID)', '@(location.Description)')">
+                                    <i class="material-icons">settings</i>
+                                </a>
+                            </li>
+                            <!--add a divider -->
+                            <li class="divider"></li>
+
+                        }
+                    }
+                }
+                <li><a href="#modalAddLocation" class="modal-trigger"style="color:black;">Add Location... </a></li>
+            </ul>
+        </div>
+
+        <div class="nav-content" id="navcontent" >
+            @{
+                if (ViewBag.Locations != null && ViewBag.Locations.Count > 0)
+                {
+                    var locationindex = 0;
+                    foreach (var location in ViewBag.Locations)
+                    {
+                        <ul class="tabs tabs-transparent location-tabs" id="locationtablist_@(location.Name.ToLower())_@(location.LocationID)" >
+                            <!--Add hidden input element with location id here-->
+                            @if (ViewBag.Categories != null && ViewBag.Categories.Count > 0)
+                            {
+                                foreach (var category in ViewBag.Categories[locationindex])
+                                {
+                                    <li class="tab">
+                                        <a href="#"style="color:black;" id="categorytab_@(category.Name.ToLower())_@(category.CategoryID)" onclick="ClickedTab(this.id)">@category.Name</a>
+                                    </li>
+                                    <li>
+                                        <a style="color:black;"href="#" class="tab" id="categorySettings_@(category.Name.ToLower())_@(category.LocationID)" onclick="openCategorySettingsModal('@(location.LocationID)','@(category.Name)', '@(category.CategoryID)', '@(category.Description)')">
+                                            <i class="material-icons">settings</i>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            <li><a href="#" style="color: black; width: 200px;"class="tab modal-trigger"  onclick="openAddCategoryModal('@(location.LocationID)')" >Add Category...</a></li>
+                        </ul>
+                        locationindex++;
+                    }
+                }
+            }
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        @{
+            if (ViewBag.Locations != null && ViewBag.Locations.Count > 0)
+            {
+                var indexcontent = 0;
+                foreach (var location in ViewBag.Locations)
+                {
+                    <div id="location_@(location.Name.ToLower())_@(location.LocationID)">
+                        @if (ViewBag.Categories[indexcontent] != null && ViewBag.Categories[indexcontent].Count > 0)
+                        {
+                            int indexcontent2 = 0;
+                            foreach (var category in ViewBag.Categories[indexcontent])
+                            {
+                                <input type="hidden" id="categoryid_@(category.Name.ToLower())_@(category.CategoryID)" value="@(category.CategoryID)" />
+                                <div id="categorycontent_@(category.Name.ToLower())_@(category.CategoryID)">
+                                    <!-- items here-->
+                                    <h1>@category.Name</h1>
+                                    <div class="wrapper">
+                                        @if (ViewBag.Items[indexcontent][indexcontent2] != null && ViewBag.Items[indexcontent][indexcontent2].Count > 0)
+                                        {
+                                            foreach (var item in ViewBag.Items[indexcontent][indexcontent2])
+                                            {
+                                                <div class="inventory-card" style="background-image: url(@Url.Content(item.ImagePath));">
+                                                    <span class="item-quantity">@item.Quantity</span>
+                                                    <div class="card__content">
+                                                        <p class="card__title">@item.Name</p>
+                                                        <p class="card__description">@item.Description</p>
+                                                        @if (item.IsPerishable)
+                                                        {
+                                                            <p class="card__description">
+                                                                Expiration Date:
+                                                                @foreach (var date in ViewBag.Dates)
+                                                                {
+                                                                    if (date.ItemID == item.ItemID)
+                                                                    {
+                                                                        @date.ExpirationDate.ToString("yyyy-MM-dd")
+                                                                        //generate hidden date input to send to the settings modal
+                                                                        <input type="hidden" id="expirationdate_@(item.ItemID)" value="@date.ExpirationDate.ToString("yyyy-MM-dd")" />
+                                                                    }
+                                                                }
+                                                            </p>
+                                                        }
+                                                        <p class="card__description">Quantity: @item.Quantity</p>
+                                                        <div class="button-container">
+                                                            <a class="btn-floating btn-small waves-effect waves-light green" onclick="triggerUpload(this)">
+                                                                <i class="material-icons">upload</i>
+                                                                <input type="file" style="display: none;" class="upload-input" onchange="handleImageUpload(this, '@item.ItemID')">
+                                                            </a>
+                                                            <a class="btn-floating btn-small waves-effect waves-light blue" onclick="openItemSettingsModal('@item.Name','@item.ItemID','@item.Description','@item.Quantity','@item.IsPerishable')">
+                                                                <i class="material-icons">settings</i>
+                                                            </a>
+                                                            <a class="btn-floating btn-small waves-effect waves-light red" onclick="deleteItem('@item.ItemID')"><i class="material-icons">delete</i></a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            }
+                                        }
+                                        <div class="inventory-card" onclick="openAddItemModal(@category.CategoryID)">
+                                            <i class="material-icons" style="font-size: 75px;">
+                                                add_circle_outline
+                                            </i>
+                                        </div>
+                                    </div>
+                                </div>
+                                indexcontent2++;
+                            }
+                        }
+                    </div>
+                    indexcontent++;
+                }
+            }
+
+
+
+        }
+    </div>
+    <div id="modalAddLocation" class="modal modal-fixed-footer login-container">
+        <div class="modal-content">
+            <h4>Add Location</h4>
+            <form id="addLocationForm">
+                <div class="input-field">
+                    <input type="text" id="locationName" name="name" required>
+                    <label for="locationName">Location Name</label>
+                </div>
+                <div class="input-field">
+                    <textarea id="locationDescription" name="description" class="materialize-textarea" required></textarea>
+                    <label for="locationDescription">Location Description</label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            <a href="#" class="waves-effect waves-green btn-flat" onclick="addLocation()">Add Location</a>
+        </div>
+    </div>
+
+    <div id="modalAddCategory" class="modal modal-fixed-footer login-container">
+        <div class="modal-content">
+            <h4>Add Category</h4>
+            <form id="addCategoryForm">
+                <div class="input-field">
+                    <input type="text" id="categoryName" name="name" required>
+                    <label for="categoryName">Category Name</label>
+                </div>
+                <div class="input-field">
+                    <textarea id="categoryDescription" name="description" class="materialize-textarea" required></textarea>
+                    <label for="categoryDescription">Category Description</label>
+                </div>
+                <input type="hidden" id="addcategorylocationid" name="locationId">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            <a href="#" class="waves-effect waves-green btn-flat" onclick="addCategory()">Add Category</a>
+        </div>
+    </div>
+    <div id="modalAddItem" class="modal modal-fixed-footer login-container">
+        <div class="modal-content">
+            <h4>Add Item</h4>
+            <form id="addItemForm">
+                <div class="input-field">
+                    <input type="text" id="itemName" name="name" required>
+                    <label for="itemName">Item Name</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="itemDescription" name="description" required>
+                    <label for="itemDescription">Item Description</label>
+                </div>
+                <div class="input-field">
+                    <input type="number" id="itemQuantity" name="quantity" required>
+                    <label for="itemQuantity">Quantity</label>
+                </div>
+                <p>
+                    <label>
+                        <input type="checkbox" id="perishableCheckbox" />
+                        <span>Is Perishable?</span>
+                    </label>
+                </p>
+                <div class="input-field" id="datepickerContainer" style="display: none;">
+                    <input type="text" class="datepicker" id="expirationDate" name="expirationDate">
+                    <label for="expirationDate">Expiration Date</label>
+                </div>
+                <input type="hidden" id="additemcategoryid" name="categoryid" />
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-green btn-flat">close</a>
+            <a href="#" class="waves-effect waves-green btn-flat" onclick="addItem()">Add Item</a>
+        </div>
+    </div>
+    <div id="LocationSettingsModal" class="modal modal-fixed-footer login-container">
+        <div class="modal-content">
+            <h4>Settings</h4>
+
+            <input type="hidden" id="editLocationId" name="editLocationId">
+            <div class="col s12 m6 l3">
+                <label>Location Name:</label>
+                <div class="input-field">
+                    <input type="text" id="editLocationName" name="editLocationName">
+                </div>
+                <label>Location Description:</label>
+                <div class="input-field">
+                    <textarea id="editLocationDescription" name="editLocationDescription" class="materialize-textarea" style="resize: both; overflow:auto; min-height:75px;"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4 l3">
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: center; display: flex; justify-content: space-between;">
+            <a href="#!" class="btn waves-effect waves-light left" style="color:black;" onclick="editLocation()">
+               Save <i class="material-icons">edit</i>
+            </a>
+            <a href="#!" class="btn secondary-content" style="color:black;"onclick="deleteLocation()">
+                Delete <i class="material-icons">delete</i>
+            </a>
+            <a href="#!"style="color:black;" class="modal-close waves-effect waves-green btn">
+            Close<i class="material-icons">close</i>
+            </a>
+        </div>
+    </div>
+    <div id="CategorySettingsModal" class="modal modal-fixed-footer login-container">
+        <div class="modal-content">
+            <h4>Settings</h4>
+
+            <input type="hidden" id="editCategoryId" name="editCategoryId" />
+            <p>Edit Category details</p>
+            <div class="col s12 m6 l3">
+                <label>Category Name:</label>
+                <div class="input-field">
+                    <input type="text" id="editCategoryName" name="editCategoryName">
+                </div>
+                <label>Category Description:</label>
+                <div class="input-field">
+                    <textarea id="editCategoryDescription" name="editCategoryDescription" class="materialize-textarea" style="resize: both; overflow:auto; min-height:75px;"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4 l3">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: left; display: flex; justify-content: space-between;">
+            <a style="color:black;"href="#!" class="btn waves-effect waves-light left"onclick="editCategory()">
+                Save <i class="material-icons">edit</i>
+            </a>
+            <a style="color:black;" href="#!" class="btn secondary-content" onclick="deleteCategory()">
+                Delete <i class="material-icons">delete</i>
+            </a>
+            <a style="color:black;"href="#!" class="modal-close waves-effect waves-green btn">
+                Close <i class="material-icons">close</i>
+            </a>
+        </div>
+
+
+    </div>
+    <div id="ItemSettingsModal" class="modal modal-fixed-footer login-container">
+        <div class="modal-content">
+            <h4>Settings</h4>
+            <div class="row">
+                <label>Item Name:</label>
+                <div class="input-field">
+                    <input type="text" id="editItemName" name="editItemName">
+                </div>
+                <label>Item Description:</label>
+                <div class="input-field">
+                    <textarea id="editItemDescription" name="editItemDescription" class="materialize-textarea" style="resize: both; overflow:auto; min-height:75px;"></textarea>
+                </div>
+                <label>Item Quantity:</label>
+                <div class="input-field">
+                    <input type="number" id="editItemQuantity" name="editItemQuantity">
+                </div>
+                <p>
+                    <label>
+                        <input type="checkbox" id="editperishableCheckbox" />
+                        <span>Is Perishable?</span>
+                    </label>
+                </p>
+
+                <div class="input-field" id="editdatepickerContainer" style="display:none;">
+                    <label id="editexpirationDateLabel">Expiration Date</label>
+
+                    <input type="text" id="editdatepicker" name="editdatepicker" class="datepicker">
+                </div>
+                <input type="hidden" id="editItemId" name="editItemId" />
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: left; display: flex; justify-content: space-between;">
+            <a style="color:black;"href="#!" class="modal-close waves-effect waves-green btn">
+                Close <i class="material-icons">close</i>
+            </a>
+            <a style="color:black;" href="#!" class="waves-effect waves-green btn" onclick="editItem()">Save Changes<i class="material-icons">create</i></a>
+        </div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!--Add jquery confirm js file reference from scripts folder -->
+    <script src="~/Scripts/jquery-confirm.js"></script>
+    <script src="~/Scripts/Index.js"></script>
+</body>
+</html>

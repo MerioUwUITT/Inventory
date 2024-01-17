@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+<!-- referenciar login.css-->
+<link href="~/Content/login.css" rel="stylesheet" />
+<div class="login-container">
+    <h2>Login</h2>
+
+    @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" name="email" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Login" class="btn btn-default" />
+        </div>
+    }
+    <p>No tienes una cuenta? @Html.ActionLink("Regístrate aquí", "Register", "Auth")</p>
+
+</div>
+

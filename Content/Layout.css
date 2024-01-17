@@ -1,0 +1,27 @@
+﻿/* Establecer el color de fondo de la barra de navegación a plata (EAEBEC) */
+.navbar {
+    background-color: #EAEBEC;
+}
+
+/* Establecer el color de las fuentes en la barra de navegación a negro */
+.navbar-dark .navbar-nav .nav-link {
+    color: black;
+}
+
+    /* Estilizar el botón de LogOff para que parezca otro navlink */
+    .navbar-dark .navbar-nav .nav-link.logoff-button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: black;
+    }
+
+        /* Ocultar el borde del botón de LogOff al hacer hover */
+        .navbar-dark .navbar-nav .nav-link.logoff-button:hover {
+            border: none;
+        }
+
+/* Estilo adicional para ocultar los enlaces cuando el usuario no está autenticado */
+.hidden-when-not-authenticated .navbar-nav {
+    display: none;
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="92bec0a1e37e41e09945a9fd1690fe98" Name="Diagram1">
+        <EntityTypeShape EntityType="InventoryModel.Category" Width="1.5" PointX="7.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryModel.Inventory" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryModel.Item" Width="1.5" PointX="9.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryModel.Location" Width="1.5" PointX="5.375" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryModel.PerishableItem" Width="1.5" PointX="12" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryModel.sysdiagram" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventoryModel.User" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
+        <AssociationConnector Association="InventoryModel.FK__Category__Locati__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryModel.FK__Item__CategoryID__4222D4EF" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryModel.FK__Inventory__UserI__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryModel.FK__Location__Invent__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="InventoryModel.FK__Perishabl__ItemI__44FF419A" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

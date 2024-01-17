@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Inventory App</title>
+    <!-- Add materialize css references -->
+    <link href="~/Content/materialize.css" rel="stylesheet" />
+    <link href="~/Content/materialize.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @if (User.Identity.IsAuthenticated)
+    {
+        <!-- Estilo adicional para ocultar los enlaces cuando el usuario no está autenticado -->
+        <style>
+            .hidden-when-not-authenticated {
+                display: none;
+            }
+        </style>
+    }
+    <!-- Agrega este estilo en la sección head de tu documento -->
+    <style>
+        .navbar-nav .nav-link {
+            color: black !important; /* !important se usa para asegurar que este estilo prevalezca */
+        }
+        .navbar-nav button {
+            color: black !important;
+        }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark brown lighten-4" style="height: 75px;">
+        <div class="container">
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand">
+                <img src="~/Images/inventory logo.png" alt="Logo" style="height: 50px; width: 200px;" />
+            </a>
+
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" ">
+                <ul class="navbar-nav flex-grow-1">
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li><a href="javascript:void(0);" id="logOffLink" class="nav-link">LogOff</a></li>
+
+                        using (Html.BeginForm("LogOff", "Auth", FormMethod.Post, new { role = "form", id = "logOffForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid body-content">
+        @RenderBody()<!--Cuerpo de las otras views-->
+        <!-- add materializecss js references -->
+        <script src="~/Scripts/materialize.js"></script>
+        <script src="~/Scripts/materialize.min.js"></script>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - One Man Army</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script>
+        // Agregar un script para manejar el clic en el enlace de LogOff
+        document.getElementById('logOffLink').addEventListener('click', function () {
+            document.getElementById('logOffForm').submit();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+﻿.tab:hover{
+background-color: #f2f2f2;
+    border-radius: 5px;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+/*give tab a selectid item dark higlight*/
+.tab.selected{
+background-color: #1a1a1a;
+    border-radius: 5px;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

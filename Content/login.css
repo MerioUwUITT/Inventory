@@ -1,0 +1,106 @@
+﻿body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    height: 2000px;
+}
+
+.login-container {
+    width: 300px;
+    margin: auto;
+    margin-top: 10vh;
+    background-color: #ffffff;
+    border: 1px solid #d2d6de;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #d7ccc8;
+    color: #fff;
+}
+
+    .btn:hover {
+        background-color: #bcaaa4;
+        /*text color white*/
+color: #fff;
+    }
+
+p {
+    margin-top: 15px;
+}
+
+a {
+    color: #007bff;
+}
+
+    a:hover {
+        color: #0056b3;
+    }
+    /*center text in buttons of type a*/
+a text{
+text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+
+
+
+input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=password]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]), input[type=url]:not(.browser-default):focus:not([readonly]), input[type=time]:not(.browser-default):focus:not([readonly]), input[type=date]:not(.browser-default):focus:not([readonly]), input[type=datetime]:not(.browser-default):focus:not([readonly]), input[type=datetime-local]:not(.browser-default):focus:not([readonly]), input[type=tel]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]), input[type=search]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #d7ccc8;
+    -webkit-box-shadow: 0 1px 0 0 #d7ccc8;
+    box-shadow: 0 1px 0 0 #d7ccc8;
+}
+
+/*just like up here but for active label*/
+input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-default):focus:not([readonly])+label, input[type=password]:not(.browser-default):focus:not([readonly])+label, input[type=email]:not(.browser-default):focus:not([readonly])+label, input[type=url]:not(.browser-default):focus:not([readonly])+label, input[type=time]:not(.browser-default):focus:not([readonly])+label, input[type=date]:not(.browser-default):focus:not([readonly])+label, input[type=datetime]:not(.browser-default):focus:not([readonly])+label, input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label, input[type=tel]:not(.browser-default):focus:not([readonly])+label, input[type=number]:not(.browser-default):focus:not([readonly])+label, input[type=search]:not(.browser-default):focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label {
+    color: #d7ccc8;
+}
+.modal{
+    width:400px;
+    height: 500px;
+}
+/*set modal footer height of 75 px*/
+    .modal.modal-fixed-footer .modal-footer {
+height: 75px;
+    }
+.modal-footer {
+    text-align: center;
+}
+
+    .modal-footer a.btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modal-footer a.btn i.material-icons {
+            margin-right: 5px; /* Ajusta el margen derecho según sea necesario */
+        }
